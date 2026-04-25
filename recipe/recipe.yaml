@@ -1,0 +1,60 @@
+schema_version: 1
+
+context:
+  name: pylatte
+  version: 1.0
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://pypi.org/packages/source/${{ name[0] }}/${{ name }}/Pylatte-${{ version }}.tar.gz
+  sha256: 75de499c2f18eb0a61db8df8ad170859f0a4cf4d82823ed49e23f506cf8a17f9
+  patches:
+    - setup.patch
+
+build:
+  number: 2
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv
+
+requirements:
+  host:
+    - pip
+    - python ${{ python_min }}.*
+    - setuptools
+  run:
+    - mysql-connector-python
+    - ply
+    - pymongo
+    - python >=${{ python_min }}
+
+tests:
+  - python:
+      imports:
+        - pylatte
+        - pylatte.database
+      python_version: ${{ python_min }}.*
+  - requirements:
+      run:
+        - pip
+        - python ${{ python_min }}.*
+    script:
+      - pip check
+
+about:
+  license: MIT
+  license_file: LICENSE.txt
+  summary: A Web Framework Based on Python 3
+  description: |
+    Welcome to Pylatte Pylatte : A Web Framework Based on Python 3 Pylatte
+    is a web framework created specifically for Python 3. Developers can
+    now generate websites with Pylatte in Python 3.
+  homepage: http://pylatte.org
+  repository: https://github.com/hwanseung/pylatte
+  documentation: http://hwanseung.github.io/pylatte/
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
